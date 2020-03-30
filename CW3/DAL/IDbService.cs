@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CW3.Controllers;
+using CW3.Models;
 
 namespace CW3.DAL
 {
