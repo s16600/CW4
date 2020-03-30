@@ -18,13 +18,13 @@ namespace CW3.Controllers
         */
 
         [HttpGet]
-        public string GetStudent()
+        public string GetStudents(string orderBy)
         {
-            return "Kowalski, Malewski, Andrzejewski";
+            return $"Kowalski, Malewski, Andrzejewski sortowanie={orderBy}";
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetStudent(int id)
+        public IActionResult GetStudents(int id)
         {
             if (id == 1)
             {
