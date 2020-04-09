@@ -33,25 +33,25 @@ namespace CW3.DAL
         }
         */
 
-        private const string DataSQLCon = "Data Source=db-mssql;Initial Catalog=s16600;Integrated Security=True";
         
         public IEnumerable<Student> GetStudents()
         {
             var list = new List<Student>();
-            using (SqlConnection conection = new SqlConnection(DataSQLCon))
+
+            using (SqlConnection conection = new SqlConnection("Data Source=db-mssql;Initial Catalog=s16600;Integrated Security=True"))
             using (SqlCommand command = new SqlCommand())
             {
                 command.Connection = conection;
                 command.CommandText = "select * from Student";
 
                 conection.Open();
-                SqlDataReader sqlRead = command.ExecuteReader();
-                while (sqlRead.Read())
+                SqlDataReader sqlReader = command.ExecuteReader();
+                while (sqlReader.Read())
                 {
                     var student = new Student();
-                    student.FirstName = sqlRead["FirstName"].ToString();
-                    student.LastName = sqlRead["LastName"].ToString();
-                    student.IndexNumber = sqlRead["IndexNumber"].ToString();
+                    student.FirstName = sqlReader["FirstName"].ToString();
+                    student.LastName = sqlReader["LastName"].ToString();
+                    student.IndexNumber = sqlReader["IndexNumber"].ToString();
                     list.Add(student);
                 }
 
@@ -66,7 +66,8 @@ namespace CW3.DAL
         {
 
             var list = new List<Enrollment>();
-            using (SqlConnection conection = new SqlConnection(DataSQLCon))
+
+            using (SqlConnection conection = new SqlConnection("Data Source=db-mssql;Initial Catalog=s16600;Integrated Security=True"))
             using (SqlCommand command = new SqlCommand())
             {
                 command.Connection = conection;
@@ -74,15 +75,15 @@ namespace CW3.DAL
                 command.Parameters.AddWithValue("id", id);
 
                 conection.Open();
-                SqlDataReader sqlRead = command.ExecuteReader();
+                SqlDataReader sqlReader = command.ExecuteReader();
 
-                while (sqlRead.Read())
+                while (sqlReader.Read())
                 {
                     var enrol = new Enrollment();
-                    enrol.IdEnrollment = Int32.Parse(sqlRead["IdEnrollment"].ToString());
-                    enrol.Semester = Int32.Parse(sqlRead["Semester"].ToString());
-                    enrol.IdStudy = Int32.Parse(sqlRead["IdStudy"].ToString());
-                    enrol.StartDate = sqlRead["StartDate"].ToString();
+                    enrol.IdEnrollment = Int32.Parse(sqlReader["IdEnrollment"].ToString());
+                    enrol.Semester = Int32.Parse(sqlReader["Semester"].ToString());
+                    enrol.IdStudy = Int32.Parse(sqlReader["IdStudy"].ToString());
+                    enrol.StartDate = sqlReader["StartDate"].ToString();
                     list.Add(enrol);
                 }
 
