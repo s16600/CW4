@@ -43,6 +43,8 @@ namespace CW3.Controllers
         [HttpGet("{id}")]
         public IActionResult GetStudents(int id)
         {
+            return Ok(_dbService.GetStudents());
+            /*
             if (id == 1)
             {
                 return Ok("Kowalski");
@@ -51,6 +53,14 @@ namespace CW3.Controllers
                 return Ok("Malewski");
             }
             return NotFound("Nie znaleziono studenta");
+            */
+        }
+
+
+        [HttpGet("{id}")]
+        public IActionResult GetStudentsEnrollment(string id)
+        {
+            return Ok(_dbService.GetStudentsEnrollment(id));
         }
 
         [HttpPost]

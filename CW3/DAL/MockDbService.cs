@@ -4,12 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data;
+using CW3.DAL;
+using System.Data.SqlClient;
+
 
 namespace CW3.DAL
 {
     public class MockDbService : IDbService
     {
-
+        /*
         private static IEnumerable<Student> _students;
 
         static MockDbService()
@@ -27,6 +31,64 @@ namespace CW3.DAL
         {
             return _students;
         }
+        */
 
+        private const string DataSQLCon = "Data Source=db-mssql;Initial Catalog=s16600;Integrated Security=True";
+        
+        public IEnumerable<Student> GetStudents()
+        {
+            var list = new List<Student>();
+            using (SqlConnection conection = new SqlConnection(DataSQLCon))
+            using (SqlCommand command = new SqlCommand())
+            {
+                command.Connection = conection;
+                command.CommandText = "select * from Student";
+
+                conection.Open();
+                SqlDataReader sqlRead = command.ExecuteReader();
+                while (sqlRead.Read())
+                {
+                    var student = new Student();
+                    student.FirstName = sqlRead["FirstName"].ToString();
+                    student.LastName = sqlRead["LastName"].ToString();
+                    student.IndexNumber = sqlRead["IndexNumber"].ToString();
+                    list.Add(student);
+                }
+
+            }
+            return list;
+        }
+
+
+
+
+        public IEnumerable<Enrollment> GetStudentsEnrollment(string id)
+        {
+
+            var list = new List<Enrollment>();
+            using (SqlConnection conection = new SqlConnection(DataSQLCon))
+            using (SqlCommand command = new SqlCommand())
+            {
+                command.Connection = conection;
+                command.CommandText = "SELECT e.IdEnrollment,e.Semester,e.IdStudy,e.StartDate FROM Student AS s INNER JOIN Enrollment as e ON s.IdEnrollment = e.IdEnrollment WHERE s.IndexNumber = @id";
+                command.Parameters.AddWithValue("id", id);
+
+                conection.Open();
+                SqlDataReader sqlRead = command.ExecuteReader();
+
+                while (sqlRead.Read())
+                {
+                    var enrol = new Enrollment();
+                    enrol.IdEnrollment = Int32.Parse(sqlRead["IdEnrollment"].ToString());
+                    enrol.Semester = Int32.Parse(sqlRead["Semester"].ToString());
+                    enrol.IdStudy = Int32.Parse(sqlRead["IdStudy"].ToString());
+                    enrol.StartDate = sqlRead["StartDate"].ToString();
+                    list.Add(enrol);
+                }
+
+            }
+
+            return list;
+        }
     }
 }
